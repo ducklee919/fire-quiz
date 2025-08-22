@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>🔥 火災逃生小測驗</title>
+  <style>
+    body {
+      font-family: "Microsoft JhengHei", sans-serif;
+      background: #fff8f0;
+      color: #333;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    h1 {
+      text-align: center;
+      color: #d62828;
+    }
+    .quiz-container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .question {
+      margin-bottom: 20px;
+      padding: 15px;
+      border-left: 6px solid #d62828;
+      background: #fffaf5;
+      border-radius: 8px;
+    }
+    .options button {
+      display: block;
+      margin: 8px 0;
+      padding: 10px;
+      width: 100%;
+      border: none;
+      border-radius: 6px;
+      background: #f1f1f1;
+      cursor: pointer;
+      font-size: 16px;
+      text-align: left;
+    }
+    .options button:hover {
+      background: #ffe6e6;
+    }
+    .correct {
+      background: #8fd19e !important;
+      color: #fff;
+    }
+    .wrong {
+      background: #e76f51 !important;
+      color: #fff;
+    }
+    .result {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    #scoreboard {
+      text-align: center;
+      font-size: 20px;
+      margin-top: 20px;
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔥 火災逃生小測驗</h1>
+  <div class="quiz-container" id="quiz"></div>
+  <div id="scoreboard"></div>
+
+  <script>
+    const quizData = [
+      {
+        question: "情境一：你在家中聽到「失火了！」應該怎麼做？",
+        options: ["大聲喊「失火了！」提醒大家", "趕快收拾重要物品再逃生", "立刻搭電梯逃生"],
+        answer: 0
+      },
+      {
+        question: "情境二：你準備打開房門時，正確步驟是？",
+        options: ["直接打開房門衝出去", "先摸門板或門把，確認溫度", "用力踹門讓空氣進來"],
+        answer: 1
+      },
+      {
+        question: "情境三：摸門把發現燙手，外面濃煙滾滾，應該怎麼辦？",
+        options: ["馬上開門逃生", "回房間，關門、濕布塞住門縫", "躲到浴室沖水"],
+        answer: 1
+      },
+      {
+        question: "情境四：逃生時發現走廊都是濃煙，你應該？",
+        options: ["低姿勢前進", "用衣物包住頭，往上層樓跑", "捂住眼睛往前衝"],
+        answer: 0
+      },
+      {
+        question: "情境五：你退回房間，門封死，應該怎麼辦？",
+        options: ["打開窗戶揮舞白布或手電筒求救", "打電話 119，報告位置", "保持安靜，等人發現", "A 與 B 都正確"],
+        answer: 3
+      },
+      {
+        question: "情境六：下列哪一個做法是錯的？",
+        options: ["用電梯逃生", "回去拿東西", "往上跑到屋頂避難", "以上皆是"],
+        answer: 3
+      },
+      {
+        question: "情境七：如果你身上著火，該怎麼辦？",
+        options: ["立刻奔跑，增加風速讓火熄滅", "脫掉衣服或就地打滾壓滅火焰", "用水澆身體降溫"],
+        answer: 1
+      },
+      {
+        question: "情境八：在家中電器發生火災時，應該怎麼處理？",
+        options: ["立刻澆水滅火", "先切斷電源，再用滅火器或滅火毯滅火", "用毛巾拍打火焰"],
+        answer: 1
+      },
+      {
+        question: "情境九：火災逃生的原則是？",
+        options: ["往上跑，因為高處空氣較乾淨", "往下或往外逃生", "隨便選一個方向衝出去"],
+        answer: 1
+      },
+      {
+        question: "情境十：安全逃出火場後，正確的行為是？",
+        options: ["趕快回去拿東西", "遠離火場，並向消防員報告是否還有人受困", "留在火場附近看熱鬧"],
+        answer: 1
+      }
+    ];
+
+    let score = 0;
+    let answeredCount = 0;
+
+    const quizContainer = document.getElementById("quiz");
+    const scoreboard = document.getElementById("scoreboard");
+
+    quizData.forEach((q, index) => {
+      const questionDiv = document.createElement("div");
+      questionDiv.classList.add("question");
+
+      const qTitle = document.createElement("h3");
+      qTitle.innerText = `${index+1}. ${q.question}`;
+      questionDiv.appendChild(qTitle);
+
+      const optionsDiv = document.createElement("div");
+      optionsDiv.classList.add("options");
+
+      q.options.forEach((opt, i) => {
+        const btn = document.createElement("button");
+        btn.innerText = opt;
+        btn.onclick = () => {
+          if (btn.classList.contains("disabled")) return;
+
+          if (i === q.answer) {
+            btn.classList.add("correct");
+            result.innerText = "✅ 答對了！";
+            score++;
+          } else {
+            btn.classList.add("wrong");
+            result.innerText = "❌ 答錯了！";
+          }
+
+          answeredCount++;
+          Array.from(optionsDiv.children).forEach(b => b.classList.add("disabled"));
+
+          if (answeredCount === quizData.length) {
+            scoreboard.innerText = `你的得分：${score} / ${quizData.length}`;
+          }
+        };
+        optionsDiv.appendChild(btn);
+      });
+
+      const result = document.createElement("div");
+      result.classList.add("result");
+
+      questionDiv.appendChild(optionsDiv);
+      questionDiv.appendChild(result);
+
+      quizContainer.appendChild(questionDiv);
+    });
+  </script>
+</body>
+</html>
